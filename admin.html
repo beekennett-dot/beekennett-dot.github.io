@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta Key Administrator Dashboard</title>
+    <style>
+        :root {
+            --bg-main: #313338;          /* Discord Theme Dark main bg */
+            --bg-card: #2b2d31;          /* Discord Container bg */
+            --bg-input: #1e1f22;         /* Discord Input deep dark */
+            --blurple: #5865f2;          /* Discord Primary Button Blurple */
+            --blurple-hover: #4752c4;    /* Discord Button Hover */
+            --text-normal: #dbdee1;      /* Discord main text color */
+            --text-muted: #949ba4;       /* Discord secondary text color */
+            --danger: #f23f43;           /* Discord Red error */
+            --green-success: #23a55a;    /* Discord Online/Success Green */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-normal);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .dashboard {
+            background-color: var(--bg-card);
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--bg-input);
+            padding-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .section {
+            margin-bottom: 32px;
+            background-color: var(--bg-input);
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            background-color: var(--bg-main);
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--text-normal);
+            font-family: monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--blurple);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            color: #ffffff;
+            border: none;
+            border-radius: 3px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .btn-primary { background-color: var(--blurple); }
+        .btn-primary:hover { background-color: var(--blurple-hover); }
+        .btn-danger { background-color: var(--danger); }
+        .btn-danger:hover { background-color: #bd3235; }
+        .btn-success { background-color: var(--green-success); }
+        .btn-success:hover { background-color: #1a7f43; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--bg-main);
+            padding: 16px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 4px;
+        }
+
+        .stat-val.spent { color: var(--danger); }
+        .stat-val.available { color: var(--green-success); }
+
+        .key-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: var(--bg-main);
+            padding: 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            list-style: none;
+        }
+
+        .key-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .status-badge {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .badge-spent { background-color: rgba(242, 63, 67, 0.2); color: var(--danger); }
+        .badge-avail { background-color: rgba(35, 165, 90, 0.2); color: var(--green-success); }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <h1>Key Management Dashboard</h1>
+
+        <!-- SECTION 1: SYSTEM MONITOR -->
+        <div class="section">
+            <h2>Real-time Monitor</h2>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div>Total Monitored Keys</div>
+                    <div class="stat-val" id="total-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Spent Keys (Used)</div>
+                    <div class="stat-val spent" id="spent-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Available Keys</div>
+                    <div class="stat-val available" id="avail-count">0</div>
+                </div>
+            </div>
+            
+            <h2>Tracked Inventory History</h2>
+            <ul class="key-list" id="inventory-display">
+                <!-- Dynamic Items -->
+            </ul>
+        </div>
+
+        <!-- SECTION 2: RUNTIME CONTROL INJECTOR -->
+        <div class="section">
+            <h2>Inject Custom Runtime Inventory</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;">
+                Paste fresh keys below (one per line). *Note: Runtime injection updates local testing memory instantly without requiring a code commit.*
+            </p>
+            <textarea id="bulk-input" placeholder="AAAA-BBB-CC-D&#10;EEEE-FFF-GG-H"></textarea>
+            <div class="btn-group">
+                <button class="btn-primary" id="btn-inject">Inject Inventory</button>
+                <button class="btn-danger" id="btn-reset">Reset Spent Status (Clear Usage)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default baseline array mirror matching index.html fallback
+        const hardcodedKeys = [
+            "WJQX-XRN-LT-Z", "KMPB-VDG-HW-F", "YCLR-FTK-JZ-Q", "NXGD-MSB-PV-R", "ZHFW-QLK-CJ-X",
+            "VTRM-NBP-DG-S", "KLYQ-WFX-RH-Z", "JBCS-MTV-LK-P", "PDXW-FGH-ZR-N", "LQBM-VKC-ST-F"
+        ];
+
+        function getActiveInventory() {
+            const stored = localStorage.getItem('runtimeInventoryKeys');
+            return stored ? JSON.parse(stored) : hardcodedKeys;
+        }
+
+        function refreshDashboard() {
+            const currentInventory = getActiveInventory();
+            const spentKeys = JSON.parse(localStorage.getItem('spentAccessKeys')) || [];
+            
+            let spentCounter = 0;
+            const listContainer = document.getElementById('inventory-display');
+            listContainer.innerHTML = '';
+
+            currentInventory.forEach(key => {
+                const isSpent = spentKeys.includes(key);
+                if(isSpent) spentCounter++;
+
+                const li = document.createElement('li');
+                li.className = 'key-item';
+                li.innerHTML = `
+                    <span>${key}</span>
+                    <span class="status-badge ${isSpent ? 'badge-spent' : 'badge-avail'}">${isSpent ? 'Spent' : 'Ready'}</span>
+                `;
+                listContainer.appendChild(li);
+            });
+
+            document.getElementById('total-count').textContent = currentInventory.length;
+            document.getElementById('spent-count').textContent = spentCounter;
+            document.getElementById('avail-count').textContent = currentInventory.length - spentCounter;
+        }
+
+        // Action: Inject local runtime keys
+        document.getElementById('btn-inject').addEventListener('click', () => {
+            const rawText = document.getElementById('bulk-input').value.trim();
+            if (!rawText) return alert('Please input valid key values.');
+
+            // Split items by line breaks, normalize case and spaces
+            const newKeys = rawText.split('\n').map(k => k.trim().toUpperCase()).filter(k => k.length > 0);
+            
+            localStorage.setItem('runtimeInventoryKeys', JSON.stringify(newKeys));
+            alert(`Successfully initialized runtime tracking for ${newKeys.length} keys!`);
+            document.getElementById('bulk-input').value = '';
+            refreshDashboard();
+        });
+
+        // Action: Wipe validation memory locks
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all single-use tracking states? This clears all use milestones.')) {
+                localStorage.removeItem('spentAccessKeys');
+                refreshDashboard();
+            }
+        });
+
+        // Run setup metrics
+        window.addEventListener('storage', refreshDashboard);
+        refreshDashboard();
+    </script>
+</body>
+</html>
