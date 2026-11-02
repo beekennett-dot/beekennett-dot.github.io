@@ -232,14 +232,21 @@ if (runtimeStorage) {
         const submitBtn = document.getElementById('submit-btn');
         const msgBox = document.getElementById('msg-box');
 
-        keyInput.addEventListener('input', (e) => {
-            let val = e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
-            let formatted = '';
-            if (val.length > 0) formatted += val.substring(0, 4);
-            if (val.length > 4) formatted += '-' + val.substring(4, 7);
-            if (val.length > 7) formatted += '-' + val.substring(7, 9);
-            if (val.length > 9) formatted += '-' + val.substring(9, 10);
-            e.target.value = formatted;
+// Automatically format user input with dashes as they type (AAAA-BBB-CC-D)
+keyInput.addEventListener('input', (e) => {
+    // 1. Strip out anything that isn't a plain letter or number
+    let val = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    let formatted = '';
+    
+    // 2. Dynamically stitch the dashes into the text field at the exact character intervals
+    if (val.length > 0) formatted += val.substring(0, 4);
+    if (val.length > 4) formatted += '-' + val.substring(4, 7);
+    if (val.length > 7) formatted += '-' + val.substring(7, 9);
+    if (val.length > 9) formatted += '-' + val.substring(9, 10);
+    
+    e.target.value = formatted;
+});
+
         });
 
         submitBtn.addEventListener('click', () => {
