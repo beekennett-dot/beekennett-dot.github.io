@@ -200,7 +200,7 @@
 const discordUser = document.getElementById('discord-id').value.trim();
 
 if (discordUser) {
-    // Fire a background web request to your Pipedream webhook gateway URL
+    // Fire a background web request to "https://eohvlyvibn01gbu.m.pipedream.net"
     fetch("https://eohvlyvibn01gbu.m.pipedream.net", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -213,7 +213,6 @@ if (discordUser) {
     .then(response => console.log("Discord role request sent successfully!"))
     .catch(error => console.error("Error sending to Discord gateway:", error));
 }
-<script>
 
     <script>
         const validKeys = [
