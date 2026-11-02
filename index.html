@@ -167,28 +167,21 @@
 
     <!-- SCREEN 1: VERIFICATION -->
     <div class="container" id="auth-screen">
-        <h1>Welcome!</h1>
+        <h1>Welcome Back!</h1>
         <p class="subtitle">Enter an access key to be whitelisted into Beta.</p>
         
         <div class="price-tag">$2.50 / key</div>
         
-<div class="input-group">
-    <label for="discord-id">Your Discord Username or ID</label>
-    <input type="text" id="discord-id" placeholder="username_here" autocomplete="off" style="text-transform: none; letter-spacing: normal;">
-</div>
-
-<div class="input-group">
-    <label for="access-key">Activation Key</label>
-    <input type="text" id="access-key" placeholder="Your key goes here." autocomplete="off" maxlength="14">
-</div>
-
+        <div class="input-group">
+            <label for="access-key">Activation Key</label>
+            <input type="text" id="access-key" placeholder="AAAA-BBB-CC-D" autocomplete="off" maxlength="14">
+        </div>
         
         <button id="submit-btn">Activate Key</button>
         <div class="message error" id="msg-box"></div>
     </div>
 
     <!-- SCREEN 2: DOWNLOAD PAGE -->
-
     <div class="container hidden" id="download-screen">
         <div class="success-icon">✓</div>
         <h1>Key Activated</h1>
@@ -196,35 +189,11 @@
         
         <a href="this-game-isnt-made-yet.lol" class="download-btn">Download Release Package</a>
     </div>
-<script>
-const discordUser = document.getElementById('discord-id').value.trim();
-
-if (discordUser) {
-    // Fire a background web request to "https://eohvlyvibn01gbu.m.pipedream.net"
-    fetch("https://eohvlyvibn01gbu.m.pipedream.net", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: discordUser,
-            activatedKey: userInput,
-            timestamp: new Date().toISOString()
-        })
-    })
-    .then(response => console.log("Discord role request sent successfully!"))
-    .catch(error => console.error("Error sending to Discord gateway:", error));
-}
 
     <script>
         const validKeys = [
             "DEVE-LOP-ER-S"
         ];
-        // Dynamic override engine: Check if admin dashboard injected custom running inventory variables
-const runtimeStorage = localStorage.getItem('runtimeInventoryKeys');
-if (runtimeStorage) {
-    // Dynamically replace structural configuration list with runtime values
-    validKeys.length = 0; 
-    validKeys.push(...JSON.parse(runtimeStorage));
-}
 
         const authScreen = document.getElementById('auth-screen');
         const downloadScreen = document.getElementById('download-screen');
@@ -232,21 +201,14 @@ if (runtimeStorage) {
         const submitBtn = document.getElementById('submit-btn');
         const msgBox = document.getElementById('msg-box');
 
-// Automatically format user input with dashes as they type (AAAA-BBB-CC-D)
-keyInput.addEventListener('input', (e) => {
-    // 1. Strip out anything that isn't a plain letter or number
-    let val = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-    let formatted = '';
-    
-    // 2. Dynamically stitch the dashes into the text field at the exact character intervals
-    if (val.length > 0) formatted += val.substring(0, 4);
-    if (val.length > 4) formatted += '-' + val.substring(4, 7);
-    if (val.length > 7) formatted += '-' + val.substring(7, 9);
-    if (val.length > 9) formatted += '-' + val.substring(9, 10);
-    
-    e.target.value = formatted;
-});
-
+        keyInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
+            let formatted = '';
+            if (val.length > 0) formatted += val.substring(0, 4);
+            if (val.length > 4) formatted += '-' + val.substring(4, 7);
+            if (val.length > 7) formatted += '-' + val.substring(7, 9);
+            if (val.length > 9) formatted += '-' + val.substring(9, 10);
+            e.target.value = formatted;
         });
 
         submitBtn.addEventListener('click', () => {
