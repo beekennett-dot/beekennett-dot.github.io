@@ -167,21 +167,28 @@
 
     <!-- SCREEN 1: VERIFICATION -->
     <div class="container" id="auth-screen">
-        <h1>Welcome Back!</h1>
+        <h1>Welcome!</h1>
         <p class="subtitle">Enter an access key to be whitelisted into Beta.</p>
         
         <div class="price-tag">$2.50 / key</div>
         
-        <div class="input-group">
-            <label for="access-key">Activation Key</label>
-            <input type="text" id="access-key" placeholder="AAAA-BBB-CC-D" autocomplete="off" maxlength="14">
-        </div>
+<div class="input-group">
+    <label for="discord-id">Your Discord Username or ID</label>
+    <input type="text" id="discord-id" placeholder="username_here" autocomplete="off" style="text-transform: none; letter-spacing: normal;">
+</div>
+
+<div class="input-group">
+    <label for="access-key">Activation Key</label>
+    <input type="text" id="access-key" placeholder="Your key goes here." autocomplete="off" maxlength="14">
+</div>
+
         
         <button id="submit-btn">Activate Key</button>
         <div class="message error" id="msg-box"></div>
     </div>
 
     <!-- SCREEN 2: DOWNLOAD PAGE -->
+
     <div class="container hidden" id="download-screen">
         <div class="success-icon">✓</div>
         <h1>Key Activated</h1>
@@ -189,128 +196,28 @@
         
         <a href="this-game-isnt-made-yet.lol" class="download-btn">Download Release Package</a>
     </div>
+<script>
+const discordUser = document.getElementById('discord-id').value.trim();
+
+if (discordUser) {
+    // Fire a background web request to your Pipedream webhook gateway URL
+    fetch("https://eohvlyvibn01gbu.m.pipedream.net", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: discordUser,
+            activatedKey: userInput,
+            timestamp: new Date().toISOString()
+        })
+    })
+    .then(response => console.log("Discord role request sent successfully!"))
+    .catch(error => console.error("Error sending to Discord gateway:", error));
+}
+<script>
 
     <script>
         const validKeys = [
-            "WJQX-XRN-LT-Z", "KMPB-VDG-HW-F", "YCLR-FTK-JZ-Q", "NXGD-MSB-PV-R", "ZHFW-QLK-CJ-X",
-            "VTRM-NBP-DG-S", "KLYQ-WFX-RH-Z", "JBCS-MTV-LK-P", "PDXW-FGH-ZR-N", "LQBM-VKC-ST-F",
-            "YRHZ-XWP-DG-L", "MNKF-VST-QL-B", "XGDB-PMV-RH-F", "ZJQL-FKN-WS-X", "WCBV-XTM-LK-D",
-            "PRHG-KND-ZV-Q", "LFTM-SBC-WK-X", "NKVP-XDG-RH-Z", "ZJLF-MQT-WK-P", "XBCG-VDN-ST-R",
-            "WFHQ-KML-JZ-D", "PMVR-STK-XG-L", "LKNJ-BVC-DF-X", "ZRHD-WGM-ST-P", "KXCV-BML-QN-Z",
-            "YTHG-FKD-NW-R", "VJMX-CQS-LK-B", "PDKF-WNT-ZG-X", "LBVR-SMG-HQ-C", "XNKT-PJD-VW-Z",
-            "ZRFH-WLC-MK-P", "KNGD-VSM-TQ-B", "WJXC-KPB-DF-R", "PMTL-NVX-RH-Z", "YGCH-KNF-WD-Q",
-            "LXVG-SBM-QT-K", "ZNDF-WKC-PR-X", "WKLT-MVB-QG-F", "PNXC-VGR-ST-B", "YFHD-KML-QW-Z",
-            "LBMX-CSQ-TK-N", "ZKVR-WDG-HF-P", "WNFT-MXB-LK-Q", "PBCG-VDH-RN-Z", "YKLT-SBM-QF-W",
-            "XJDF-WQN-KT-V", "ZPRM-LGC-SH-D", "WKNB-VFX-RT-Z", "PMCG-WTL-ND-F", "YLXF-MKB-QS-V",
-            "ZJDR-WFN-KT-B", "WKSM-VLG-HP-Q", "PXCB-VDN-RF-Z", "YKLF-MWT-QG-C", "ZNHD-WKB-ST-P",
-            "WKLT-MCV-RH-G", "PXDG-KNF-WT-Z", "YLBM-VSQ-TK-F", "ZJDF-WKT-QN-P", "WKRM-LCB-SD-X",
-            "PXNG-WKF-VT-B", "YKLV-SMD-QG-R", "ZNCH-WKF-RT-Z", "WKLT-MVX-QG-P", "PXBD-WKF-VR-X",
-            "YKLM-SMD-QT-G", "ZNJF-WKC-PT-B", "WKLT-MVX-QG-R", "PXBG-WKF-VT-D", "YKLM-SMD-QF-G",
-            "ZNJH-WKC-PT-B", "WKLT-MVX-QG-S", "PXBL-WKF-VT-D", "YKLM-SMD-QF-N", "ZNJH-WKC-PT-C",
-            "WKLT-MVX-QG-T", "PXBQ-WKF-VT-D", "YKLM-SMD-QF-P", "ZNJH-WKC-PT-F", "WKLT-MVX-QG-W",
-            "PXBR-WKF-VT-D", "YKLM-SMD-QF-R", "ZNJH-WKC-PT-G", "WKLT-MVX-QG-Y", "PXBT-WKF-VT-D",
-            "YKLM-SMD-QF-S", "ZNJH-WKC-PT-M", "WKLT-MVX-QG-Z", "PXBV-WKF-VT-D", "YKLM-SMD-QF-T",
-            "ZNJH-WKC-PT-N", "WKLT-MVX-QW-A", "PXBW-WKF-VT-D", "YKLM-SMD-QF-V", "ZNJH-WKC-PT-R",
-            "WKLT-MVX-QW-B", "PXBX-WKF-VT-D", "YKLM-SMD-QF-W", "ZNJH-WKC-PT-S", "WKLT-MVX-QW-C",
-            "PXBY-WKF-VT-D", "YKLM-SMD-QF-X", "ZNJH-WKC-PT-V", "WKLT-MVX-QW-D", "PXBZ-WKF-VT-D",
-            "YKLM-SMD-QF-Y", "ZNJH-WKC-PT-W", "WKLT-MVX-QW-F", "PXCB-WKF-VT-D", "YKLM-SMD-QF-Z",
-            "ZNJH-WKC-PT-X", "WKLT-MVX-QW-G", "PXCC-WKF-VT-D", "YKLM-SMD-QG-A", "ZNJH-WKC-PT-Y",
-            "WKLT-MVX-QW-H", "PXCD-WKF-VT-D", "YKLM-SMD-QG-B", "ZNJH-WKC-PT-Z", "WKLT-MVX-QW-J",
-            "PXCF-WKF-VT-D", "YKLM-SMD-QG-C", "ZNJH-WKC-PV-A", "WKLT-MVX-QW-K", "PXCG-WKF-VT-D",
-            "YKLM-SMD-QG-D", "ZNJH-WKC-PV-B", "WKLT-MVX-QW-L", "PXCH-WKF-VT-D", "YKLM-SMD-QG-F",
-            "ZNJH-WKC-PV-C", "WKLT-MVX-QW-M", "PXCJ-WKF-VT-D", "YKLM-SMD-QG-H", "ZNJH-WKC-PV-D",
-            "WKLT-MVX-QW-N", "PXCK-WKF-VT-D", "YKLM-SMD-QG-J", "ZNJH-WKC-PV-F", "WKLT-MVX-QW-P",
-            "PXCL-WKF-VT-D", "YKLM-SMD-QG-K", "ZNJH-WKC-PV-G", "WKLT-MVX-QW-R", "PXCM-WKF-VT-D",
-            "YKLM-SMD-QG-L", "ZNJH-WKC-PV-H", "WKLT-MVX-QW-S", "PXCN-WKF-VT-D", "YKLM-SMD-QG-M",
-            "ZNJH-WKC-PV-J", "WKLT-MVX-QW-T", "PXCP-WKF-VT-D", "YKLM-SMD-QG-N", "ZNJH-WKC-PV-K",
-            "WKLT-MVX-QW-V", "PXCQ-WKF-VT-D", "YKLM-SMD-QG-P", "ZNJH-WKC-PV-L", "WKLT-MVX-QW-W",
-            "PXCR-WKF-VT-D", "YKLM-SMD-QG-R", "ZNJH-WKC-PV-M", "WKLT-MVX-QW-X", "PXCS-WKF-VT-D",
-            "YKLM-SMD-QG-S", "ZNJH-WKC-PV-N", "WKLT-MVX-QW-Y", "PXCT-WKF-VT-D", "YKLM-SMD-QG-T",
-            "ZNJH-WKC-PV-P", "WKLT-MVX-QW-Z", "PXCV-WKF-VT-D", "YKLM-SMD-QG-V", "ZNJH-WKC-PV-R",
-            "WKLT-MVX-QX-A", "PXCW-WKF-VT-D", "YKLM-SMD-QG-W", "ZNJH-WKC-PV-S", "WKLT-MVX-QX-B",
-            "PXCX-WKF-VT-D", "YKLM-SMD-QG-X", "ZNJH-WKC-PV-T", "WKLT-MVX-QX-C", "PXCY-WKF-VT-D",
-            "YKLM-SMD-QG-Y", "ZNJH-WKC-PV-V", "WKLT-MVX-QX-D", "PXCZ-WKF-VT-D", "YKLM-SMD-QG-Z",
-            "ZNJH-WKC-PV-W", "WKLT-MVX-QX-F", "PXDB-WKF-VT-D", "YKLM-SMD-QH-A", "ZNJH-WKC-PV-X",
-            "WKLT-MVX-QX-G", "PXDC-WKF-VT-D", "YKLM-SMD-QH-B", "ZNJH-WKC-PV-Y", "WKLT-MVX-QX-H",
-            "PXDD-WKF-VT-D", "YKLM-SMD-QH-C", "ZNJH-WKC-PV-Z", "WKLT-MVX-QX-J", "PXDF-WKF-VT-D",
-            "YKLM-SMD-QH-D", "ZNJH-WKC-PW-A", "WKLT-MVX-QX-K", "PXDG-WKF-VT-D", "YKLM-SMD-QH-F",
-            "ZNJH-WKC-PW-B", "WKLT-MVX-QX-L", "PXDH-WKF-VT-D", "YKLM-SMD-QH-H", "ZNJH-WKC-PW-C",
-            "WKLT-MVX-QX-M", "PXDJ-WKF-VT-D", "YKLM-SMD-QH-J", "ZNJH-WKC-PW-D", "WKLT-MVX-QX-N",
-            "PXDK-WKF-VT-D", "YKLM-SMD-QH-K", "ZNJH-WKC-PW-F", "WKLT-MVX-QX-P", "PXDL-WKF-VT-D",
-            "YKLM-SMD-QH-L", "ZNJH-WKC-PW-G", "WKLT-MVX-QX-R", "PXDM-WKF-VT-D", "YKLM-SMD-QH-M",
-            "ZNJH-WKC-PW-H", "WKLT-MVX-QX-S", "PXDN-WKF-VT-D", "YKLM-SMD-QH-N", "ZNJH-WKC-PW-J",
-            "WKLT-MVX-QX-T", "PXDP-WKF-VT-D", "YKLM-SMD-QH-P", "ZNJH-WKC-PW-K", "WKLT-MVX-QX-V",
-            "PXDQ-WKF-VT-D", "YKLM-SMD-QH-R", "ZNJH-WKC-PW-L", "WKLT-MVX-QX-W", "PXDR-WKF-VT-D",
-            "YKLM-SMD-QH-S", "ZNJH-WKC-PW-M", "WKLT-MVX-QX-X", "PXDS-WKF-VT-D", "YKLM-SMD-QH-T",
-            "ZNJH-WKC-PW-N", "WKLT-MVX-QX-Y", "PXDT-WKF-VT-D", "YKLM-SMD-QH-V", "ZNJH-WKC-PW-P",
-            "WKLT-MVX-QX-Z", "PXDV-WKF-VT-D", "YKLM-SMD-QH-W", "ZNJH-WKC-PW-R", "WKLT-MVX-QY-A",
-            "PXDW-WKF-VT-D", "YKLM-SMD-QH-X", "ZNJH-WKC-PW-S", "WKLT-MVX-QY-B", "PXDX-WKF-VT-D",
-            "YKLM-SMD-QH-Y", "ZNJH-WKC-PW-T", "WKLT-MVX-QY-C", "PXDY-WKF-VT-D", "YKLM-SMD-QH-Z",
-            "ZNJH-WKC-PW-V", "WKLT-MVX-QY-D", "PXDZ-WKF-VT-D", "YKLM-SMD-QJ-A", "ZNJH-WKC-PW-W",
-            "WKLT-MVX-QY-F", "PXFB-WKF-VT-D", "YKLM-SMD-QJ-B", "ZNJH-WKC-PW-X", "WKLT-MVX-QY-G",
-            "PXFC-WKF-VT-D", "YKLM-SMD-QJ-C", "ZNJH-WKC-PW-Y", "WKLT-MVX-QY-H", "PXFD-WKF-VT-D",
-            "YKLM-SMD-QJ-D", "ZNJH-WKC-PW-Z", "WKLT-MVX-QY-J", "PXFF-WKF-VT-D", "YKLM-SMD-QJ-F",
-            "ZNJH-WKC-PX-A", "WKLT-MVX-QY-K", "PXFG-WKF-VT-D", "YKLM-SMD-QJ-H", "ZNJH-WKC-PX-B",
-            "WKLT-MVX-QY-L", "PXFH-WKF-VT-D", "YKLM-SMD-QJ-J", "ZNJH-WKC-PX-C", "WKLT-MVX-QY-M",
-            "PXFJ-WKF-VT-D", "YKLM-SMD-QJ-K", "ZNJH-WKC-PX-D", "WKLT-MVX-QY-N", "PXFK-WKF-VT-D",
-            "YKLM-SMD-QJ-L", "ZNJH-WKC-PX-F", "WKLT-MVX-QY-P", "PXFL-WKF-VT-D", "YKLM-SMD-QJ-M",
-            "ZNJH-WKC-PX-G", "WKLT-MVX-QY-R", "PXFM-WKF-VT-D", "YKLM-SMD-QJ-N", "ZNJH-WKC-PX-H",
-            "WKLT-MVX-QY-S", "PXFN-WKF-VT-D", "YKLM-SMD-QJ-P", "ZNJH-WKC-PX-J", "WKLT-MVX-QY-T",
-            "PXFP-WKF-VT-D", "YKLM-SMD-QJ-R", "ZNJH-WKC-PX-K", "WKLT-MVX-QY-V", "PXFQ-WKF-VT-D",
-            "YKLM-SMD-QJ-S", "ZNJH-WKC-PX-L", "WKLT-MVX-QY-W", "PXFR-WKF-VT-D", "YKLM-SMD-QJ-T",
-            "ZNJH-WKC-PX-M", "WKLT-MVX-QY-X", "PXFS-WKF-VT-D", "YKLM-SMD-QJ-V", "ZNJH-WKC-PX-N",
-            "WKLT-MVX-QY-Y", "PXFT-WKF-VT-D", "YKLM-SMD-QJ-W", "ZNJH-WKC-PX-P", "WKLT-MVX-QY-Z",
-            "PXFV-WKF-VT-D", "YKLM-SMD-QJ-X", "ZNJH-WKC-PX-R", "WKLT-MVX-QZ-A", "PXFW-WKF-VT-D",
-            "YKLM-SMD-QJ-Y", "ZNJH-WKC-PX-S", "WKLT-MVX-QZ-B", "PXFX-WKF-VT-D", "YKLM-SMD-QJ-Z",
-            "ZNJH-WKC-PX-T", "WKLT-MVX-QZ-C", "PXFY-WKF-VT-D", "YKLM-SMD-QK-A", "ZNJH-WKC-PX-V",
-            "WKLT-MVX-QZ-D", "PXFZ-WKF-VT-D", "YKLM-SMD-QK-B", "ZNJH-WKC-PX-W", "WKLT-MVX-QZ-F",
-            "PXGB-WKF-VT-D", "YKLM-SMD-QK-C", "ZNJH-WKC-PX-X", "WKLT-MVX-QZ-G", "PXGC-WKF-VT-D",
-            "YKLM-SMD-QK-D", "ZNJH-WKC-PX-Y", "WKLT-MVX-QZ-H", "PXGD-WKF-VT-D", "YKLM-SMD-QK-F",
-            "ZNJH-WKC-PX-Z", "WKLT-MVX-QZ-J", "PXGF-WKF-VT-D", "YKLM-SMD-QK-H", "ZNJH-WKC-PY-A",
-            "WKLT-MVX-QZ-K", "PXGG-WKF-VT-D", "YKLM-SMD-QK-J", "ZNJH-WKC-PY-B", "WKLT-MVX-QZ-L",
-            "PXGH-WKF-VT-D", "YKLM-SMD-QK-K", "ZNJH-WKC-PY-C", "WKLT-MVX-QZ-M", "PXGJ-WKF-VT-D",
-            "YKLM-SMD-QK-L", "ZNJH-WKC-PY-D", "WKLT-MVX-QZ-N", "PXGK-WKF-VT-D", "YKLM-SMD-QK-M",
-            "ZNJH-WKC-PY-F", "WKLT-MVX-QZ-P", "PXGL-WKF-VT-D", "YKLM-SMD-QK-N", "ZNJH-WKC-PY-G",
-            "WKLT-MVX-QZ-R", "PXGM-WKF-VT-D", "YKLM-SMD-QK-P", "ZNJH-WKC-PY-H", "WKLT-MVX-QZ-S",
-            "PXGN-WKF-VT-D", "YKLM-SMD-QK-R", "ZNJH-WKC-PY-J", "WKLT-MVX-QZ-T", "PXGP-WKF-VT-D",
-            "YKLM-SMD-QK-S", "ZNJH-WKC-PY-K", "WKLT-MVX-QZ-V", "PXGQ-WKF-VT-D", "YKLM-SMD-QK-T",
-            "ZNJH-WKC-PY-L", "WKLT-MVX-QZ-W", "PXGR-WKF-VT-D", "YKLM-SMD-QK-V", "ZNJH-WKC-PY-M",
-            "WKLT-MVX-QZ-X", "PXGS-WKF-VT-D", "YKLM-SMD-QK-W", "ZNJH-WKC-PY-N", "WKLT-MVX-QZ-Y",
-            "PXGT-WKF-VT-D", "YKLM-SMD-QK-X", "ZNJH-WKC-PY-P", "WKLT-MVX-QZ-Z", "PXGV-WKF-VT-D",
-            "YKLM-SMD-QK-Y", "ZNJH-WKC-PY-R", "WKLT-MVX-RA-A", "PXGW-WKF-VT-D", "YKLM-SMD-QK-Z",
-            "ZNJH-WKC-PY-S", "WKLT-MVX-RA-B", "PXGX-WKF-VT-D", "YKLM-SMD-QL-A", "ZNJH-WKC-PY-T",
-            "WKLT-MVX-RA-C", "PXGY-WKF-VT-D", "YKLM-SMD-QL-B", "ZNJH-WKC-PY-V", "WKLT-MVX-RA-D",
-            "PXGZ-WKF-VT-D", "YKLM-SMD-QL-C", "ZNJH-WKC-PY-W", "WKLT-MVX-RA-F", "PXHB-WKF-VT-D",
-            "YKLM-SMD-QL-D", "ZNJH-WKC-PY-X", "WKLT-MVX-RA-G", "PXHC-WKF-VT-D", "YKLM-SMD-QL-F",
-            "ZNJH-WKC-PY-Y", "WKLT-MVX-RA-H", "PXHD-WKF-VT-D", "YKLM-SMD-QL-H", "ZNJH-WKC-PY-Z",
-            "WKLT-MVX-RA-J", "PXHF-WKF-VT-D", "YKLM-SMD-QL-J", "ZNJH-WKC-PZ-A", "WKLT-MVX-RA-K",
-            "PXHG-WKF-VT-D", "YKLM-SMD-QL-K", "ZNJH-WKC-PZ-B", "WKLT-MVX-RA-L", "PXHH-WKF-VT-D",
-            "YKLM-SMD-QL-L", "ZNJH-WKC-PZ-C", "WKLT-MVX-RA-M", "PXHJ-WKF-VT-D", "YKLM-SMD-QL-M",
-            "ZNJH-WKC-PZ-D", "WKLT-MVX-RA-N", "PXHK-WKF-VT-D", "YKLM-SMD-QL-N", "ZNJH-WKC-PZ-F",
-            "WKLT-MVX-RA-P", "PXHL-WKF-VT-D", "YKLM-SMD-QL-P", "ZNJH-WKC-PZ-G", "WKLT-MVX-RA-R",
-            "PXHM-WKF-VT-D", "YKLM-SMD-QL-R", "ZNJH-WKC-PZ-H", "WKLT-MVX-RA-S", "PXHN-WKF-VT-D",
-            "YKLM-SMD-QL-S", "ZNJH-WKC-PZ-J", "WKLT-MVX-RA-T", "PXHP-WKF-VT-D", "YKLM-SMD-QL-T",
-            "ZNJH-WKC-PZ-K", "WKLT-MVX-RA-V", "PXHQ-WKF-VT-D", "YKLM-SMD-QL-V", "ZNJH-WKC-PZ-L",
-            "WKLT-MVX-RA-W", "PXHR-WKF-VT-D", "YKLM-SMD-QL-W", "ZNJH-WKC-PZ-M", "WKLT-MVX-RA-X",
-            "PXHS-WKF-VT-D", "YKLM-SMD-QL-X", "ZNJH-WKC-PZ-N", "WKLT-MVX-RA-Y", "PXHT-WKF-VT-D",
-            "YKLM-SMD-QL-Y", "ZNJH-WKC-PZ-P", "WKLT-MVX-RA-Z", "PXHV-WKF-VT-D", "YKLM-SMD-QL-Z",
-            "ZNJH-WKC-PZ-R", "WKLT-MVX-RB-A", "PXHW-WKF-VT-D", "YKLM-SMD-QM-A", "ZNJH-WKC-PZ-S",
-            "WKLT-MVX-RB-B", "PXHX-WKF-VT-D", "YKLM-SMD-QM-B", "ZNJH-WKC-PZ-T", "WKLT-MVX-RB-C",
-            "PXHY-WKF-VT-D", "YKLM-SMD-QM-C", "ZNJH-WKC-PZ-V", "WKLT-MVX-RB-D", "PXHZ-WKF-VT-D",
-            "YKLM-SMD-QM-D", "ZNJH-WKC-PZ-W", "WKLT-MVX-RB-F", "PXJB-WKF-VT-D", "YKLM-SMD-QM-F",
-            "ZNJH-WKC-PZ-X", "WKLT-MVX-RB-G", "PXJC-WKF-VT-D", "YKLM-SMD-QM-H", "ZNJH-WKC-PZ-Y",
-            "WKLT-MVX-RB-H", "PXJD-WKF-VT-D", "YKLM-SMD-QM-J", "ZNJH-WKC-PZ-Z", "WKLT-MVX-RB-J",
-            "PXJF-WKF-VT-D", "YKLM-SMD-QM-K", "ZNJH-WKC-QA-A", "WKLT-MVX-RB-K", "PXJG-WKF-VT-D",
-            "YKLM-SMD-QM-L", "ZNJH-WKC-QA-B", "WKLT-MVX-RB-L", "PXJH-WKF-VT-D", "YKLM-SMD-QM-M",
-            "ZNJH-WKC-QA-C", "WKLT-MVX-RB-M", "PXJJ-WKF-VT-D", "YKLM-SMD-QM-N", "ZNJH-WKC-QA-D",
-            "WKLT-MVX-RB-N", "PXJK-WKF-VT-D", "YKLM-SMD-QM-P", "ZNJH-WKC-QA-F", "WKLT-MVX-RB-P",
-            "PXJL-WKF-VT-D", "YKLM-SMD-QM-R", "ZNJH-WKC-QA-G", "WKLT-MVX-RB-R", "PXJM-WKF-VT-D",
-            "YKLM-SMD-QM-S", "ZNJH-WKC-QA-H", "WKLT-MVX-RB-S", "PXJN-WKF-VT-D", "YKLM-SMD-QM-T",
-            "ZNJH-WKC-QA-J", "WKLT-MVX-RB-T", "PXJP-WKF-VT-D", "YKLM-SMD-QM-V", "ZNJH-WKC-QA-K",
-            "WKLT-MVX-RB-V", "PXJQ-WKF-VT-D", "YKLM-SMD-QM-W", "ZNJH-WKC-QA-L", "WKLT-MVX-RB-W",
-            "PXJR-WKF-VT-D", "YKLM-SMD-QM-X", "ZNJH-WKC-QA-M", "WKLT-MVX-RB-X", "PXJS-WKF-VT-D",
-            "NN-PPR-SS-T", "VVWX-XYY-ZZ-B", "CCDF-FGG-HH-J", "LLMM-NNP-PR-S", "STVV-WXX-YY-Z",
-            "BBCC-DFF-GG-H", "HJJL-LMM-NN-P", "PRRS-STT-VV-W", "WKLT-MVX-RB-Z", "DEVE-LOP-ER-S"
+            "DEVE-LOP-ER-S"
         ];
         // Dynamic override engine: Check if admin dashboard injected custom running inventory variables
 const runtimeStorage = localStorage.getItem('runtimeInventoryKeys');
