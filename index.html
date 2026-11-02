@@ -312,6 +312,13 @@
             "NN-PPR-SS-T", "VVWX-XYY-ZZ-B", "CCDF-FGG-HH-J", "LLMM-NNP-PR-S", "STVV-WXX-YY-Z",
             "BBCC-DFF-GG-H", "HJJL-LMM-NN-P", "PRRS-STT-VV-W", "WKLT-MVX-RB-Z", "DEVE-LOP-ER-S"
         ];
+        // Dynamic override engine: Check if admin dashboard injected custom running inventory variables
+const runtimeStorage = localStorage.getItem('runtimeInventoryKeys');
+if (runtimeStorage) {
+    // Dynamically replace structural configuration list with runtime values
+    validKeys.length = 0; 
+    validKeys.push(...JSON.parse(runtimeStorage));
+}
 
         const authScreen = document.getElementById('auth-screen');
         const downloadScreen = document.getElementById('download-screen');
