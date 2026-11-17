@@ -308,7 +308,7 @@
         <section class="section">
             <h2>Inject Custom Runtime Inventory</h2>
             <p class="note">Paste fresh keys below (one per line). <em>Note: Runtime injection updates local testing memory instantly without requiring a code commit.</em></p>
-            <textarea id="key-input" placeholder="BETA-XXXX-YYYY-ZZZZ&#10;BETA-1111-2222-3333"></textarea>
+            <textarea id="key-input" placeholder="XXXX-YYY-ZZ-V&#10;XXXX-YYY-ZZ-V"></textarea>
             <div class="btn-group">
                 <button class="btn-primary" onclick="injectInventory()">Inject Inventory</button>
                 <button class="btn-warning" onclick="resetSpentStatus()">Reset Spent Status (Clear Usage)</button>
@@ -318,7 +318,7 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'beta_key_inventory_v2';
+        const STORAGE_KEY = 'beta_keys';
         let keyInventory = [];
         let selectedKeys = new Set();
 
